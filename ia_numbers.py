@@ -4,9 +4,9 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
-#1296
+#Probar en algun momento a entrenar la ia con casillas del sudoku
 
-#Hay que cambiar las capas del modelo para que den 1296
+# hacer que haga la predicción de todas y meterlas en una matriz en la que dentro hayan 9 matrices
 class numbers_ia:
 
     def __init__(self):
@@ -25,7 +25,7 @@ class numbers_ia:
         model.add(tf.keras.layers.Flatten(input_shape=(28, 28)))
         model.add(tf.keras.layers.Dense(128, activation='relu'))# Se puede poner lo que sea en el str, Relu = rectify linear unit
         model.add(tf.keras.layers.Dense(128, activation= 'relu'))
-        model.add(tf.keras.layers.Dense(10, activation='softmax')) #9 por los 9 números, esto es el 'output'. Investigar acerca del activation
+        model.add(tf.keras.layers.Dense(10, activation='softmax')) #10 por los 10 números(0-9), esto es el 'output'. Hay que poner esto debido a los 10 numeros con los que entrenamos a la ia(mnist). Investigar acerca del activation
 
         model.compile(optimizer= 'adam', loss= 'sparse_categorical_crossentropy', metrics = ['accuracy'])#Lo compilamos
 
@@ -42,17 +42,18 @@ class numbers_ia:
                 img = cv2.imread(f'squares/square{n}.png')[:,:,0]
                 img = np.invert(np.array([img]))
                 prediction = model.predict(img)
-                print(f'Number is {np.argmax(prediction)}')
-                plt.imshow(img[0], cmap= plt.cm.binary)
-                plt.show()
+                # ME HE QUEDADO AQUIIII
+                print(np.where(prediction == 1.0))
             except:
-                print('ERRORRRR!')
+                print('ERROR')
+                break
             finally:
                 n += 1
-                break
 
 
 
 nia = numbers_ia()
 
-nia.predict_numbers()
+#nia.create_model()
+
+#nia.predict_numbers()
