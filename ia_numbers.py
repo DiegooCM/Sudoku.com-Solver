@@ -3,6 +3,7 @@ import os
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+from PIL import Image
 
 #Probar en algun momento a entrenar la ia con casillas del sudoku
 
@@ -11,6 +12,7 @@ class numbers_ia:
 
     def __init__(self):
         self.model_name = 'model2.keras'
+
 
     def create_model(self):
         mnist = tf.keras.datasets.mnist
@@ -32,54 +34,117 @@ class numbers_ia:
         model.fit(x_train, y_train, epochs= 10) # Lo entrenamos
 
         model.save(self.model_name) 
+    
+    def get_number_boxes(self):
+        self.numbers_index = []
+
+        for n in range(81):
+            img = Image.open(f'squares/square{n}.png').convert('L')
+
+            dark = 0
+
+            for x in range(0, 28, 4):
+                for y in range(0, 28, 4):
+                    grey  = img.getpixel((x, y))
+
+                    if grey < 200:
+                        dark +=1
+
+            if dark>=1:
+                self.numbers_index.append(n)
 
     def predict_numbers(self):
         model = tf.keras.models.load_model(self.model_name)
-        self.matrix = []
+        self.numbers_matrix = []
 
-        n = 0
-        while os.path.isfile(f'squares/square{n}.png'):
+        for n in self.numbers_index:
+
             try:
                 img = cv2.imread(f'squares/square{n}.png')[:,:,0]
                 img = np.invert(np.array([img]))
                 prediction = model.predict(img)
 
-                number_s = np.where(prediction[0] == 1.)[0]
-                
-                # Si está vacío devuelve un 0 y si no el número
-                if len(number_s) != 0:
-                    self.matrix.append(int(number_s))
-                else:
-                    self.matrix.append(None)
-                
+                number_s = np.argmax(prediction)
+                    
+                self.numbers_matrix.append(int(number_s))
+                    
             except:
-                print('ERROR')
+                print(f'ERROR')
                 break
+
             finally:
                 n += 1
 
     def create_matrix(self):
+        self.matrix_temp = []
+        self.matrix = []
         ar2 = []
-
-        matrix = []
         n = 0
 
-        for item in self.matrix:
+        for a in range(81):
+            if a in self.numbers_index:
+                self.matrix_temp.append(self.numbers_matrix[n])
+                n += 1
+            else:
+                self.matrix_temp.append(None)
+
+        n = 0
+
+        for item in self.matrix_temp:
             ar2.append(item)
             n+=1  
             if n== 9:
                 n= 0
-                matrix.append(ar2)
+                self.matrix.append(ar2)
                 ar2 = []
               
-        
-        self.matrix = matrix
 
         print(self.matrix)
+
+    def accuracy_prediction_matrix(self):
+        real_matrix = [[None,None,None,7,6,2,None,9,None],
+               [None,None,None,3,8,None,None,2,7],
+               [2,8,None, None,5,9,1,6,3],
+               [None, None, None, None, None, None, 6, None, 1],
+               [None, 1, 5, None, None, 3, 2, None, None],
+               [6, None, None, None, 4, 5, 7, None , 8],
+               [None, 2, None, 9, None, None, 4, None, 5],
+               [None, 7, None, 8,2,4, None, None, None],
+               [9, None, None, 5, None, 7, None, 8, None]]
+
+        success = 0
+        wrong = 0
+
+        for a in range(len(real_matrix)):
+            for b in range(len(real_matrix[0])):
+                rm_item = real_matrix[a][b]
+                pm_item = self.matrix[a][b]
+
+                if rm_item == pm_item:
+                    success +=1
+                else:
+                    wrong +=1
+
+
+        print(f'Success = {success}\nWrong = {wrong}')
+
 
 
 nia = numbers_ia()
 
-nia.create_model()
+#nia.create_model()
+nia.get_number_boxes()
 nia.predict_numbers()
 nia.create_matrix()
+
+nia.accuracy_prediction_matrix()
+
+
+'''
+Model 1: 46 Success
+Model 2: 48 Success
+Model 2(greyscale): 48
+
+Model 2:(count numbers): 58 
+Model 1:(count numbers): 56
+'''

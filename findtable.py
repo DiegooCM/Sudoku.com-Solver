@@ -38,6 +38,9 @@ class board():
                 square_bbox =  x , y, square_size + x , square_size + y #im.crop((left - x0, top - y0, right - x0, bottom - y0))
                 square = board.crop(square_bbox)
                 square = square.crop((4, 4, 32, 32))
+
+                square.convert('L')
+
                 square.save(f'squares/square{n}.png')
                 n+=1
 
@@ -45,8 +48,10 @@ class board():
 
 board = board()
 
-board.reject_cookies()
-board.screenshot()
+#board.reject_cookies()
+#board.screenshot()
+
+board.get_boxes()
 
 
     
