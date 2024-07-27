@@ -1,5 +1,5 @@
 import numpy as np
-
+from time import sleep
 # Tengo que hacer listas de los posibles numeros que quedan en una fila columna o cuadrado, e ir probando con esos numeros y ver si en algun momento se repite
 
 class solver():
@@ -29,8 +29,8 @@ class solver():
                     if b == y:
                         if item != None:y_axis.append(item)
                 
-                if a == x:
-                    if item != None:x_axis.append(item)
+                    if a == x:
+                        if item != None:x_axis.append(item)
 
             return x_axis, y_axis
 
@@ -56,7 +56,7 @@ class solver():
 
             results = np.setdiff1d(posible_numbers, f_array)
             #print(results)
-
+ 
             if len(results) == 1:
                 missing = results[0]
 
@@ -73,17 +73,35 @@ class solver():
 
                         item = self.matrix[a][b]
                         if item == None:
+                            #print(f'{a, b}:')
                             x_axis, y_axis = check_x(a, b)
+                            #print(f'X axis: {x_axis} Y axis: {y_axis}')
                             square_list = check_square(a, b)
+                            #print(f'Square: {square_list}')
 
-                            #print(a, b)
+                            
                             missing = find_missing_item(x_axis, y_axis, square_list)
 
                             if missing != None: self.matrix[a][b] = missing
-                print(self.matrix)
+        
+        print(self.matrix)
+                
 
 solve = solver()
 
 solve.check_axis()
 
+
+'''
+[[3, 5, 1, 7, 6, 2, 8, 9, 4], 
+[4, 6, 9, 3, 8, 1, 5, 2, 7], 
+[2, 8, 7, 4, 5, 9, 1, 6, 3], 
+[7, 3, 4, 2, 9, 8, 6, 5, 1], 
+[8, 1, 5, 6, 7, 3, 2, 4, 9], 
+[6, 9, 2, 1, 4, 5, 7, 3, 8], 
+[1, 2, 8, 9, 3, 6, 4, 7, 5], 
+[5, 7, 3, 8, 2, 4, 9, 1, 6], 
+[9, 4, 6, 5, 1, 7, 3, 8, 2]]
+
+'''
 

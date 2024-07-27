@@ -1,13 +1,18 @@
-matrix = [[None,None,None,7,6,2,None,9,None],
-                    [None,None,None,3,8,None,None,2,7],
-                    [2,8,None, None,5,9,1,6,3],
-                    [None, None, None, None, None, None, 6, None, 1],
-                    [None, 1, 5, None, None, 3, 2, None, None],
-                    [6, None, None, None, 4, 5, 7, None , 8],
-                    [None, 2, None, 9, None, None, 4, None, 5],
-                    [None, 7, None, 8,2,4, None, None, None],
-                    [9, None, None, 5, None, 7, None, 8, None]]
+import tensorflow as tf
+import os
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+from PIL import Image
 
+model = tf.keras.models.load_model('model3.keras')
 
-if None in matrix[0]:
-    print('aidsfioj')
+img = cv2.imread(f'squares/square5.png')[:,:,0]
+
+img = np.invert(np.array([img]))
+prediction = model.predict(img)
+
+number_s = np.argmax(prediction)
+
+print(prediction)
+print(number_s)

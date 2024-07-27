@@ -11,7 +11,7 @@ from PIL import Image
 class numbers_ia:
 
     def __init__(self):
-        self.model_name = 'model2.keras'
+        self.model_name = 'model4.keras'
 
 
     def create_model(self):
@@ -25,13 +25,13 @@ class numbers_ia:
         model = tf.keras.models.Sequential()
 
         model.add(tf.keras.layers.Flatten(input_shape=(28, 28)))
-        model.add(tf.keras.layers.Dense(128, activation='relu'))# Se puede poner lo que sea en el str, Relu = rectify linear unit
-        model.add(tf.keras.layers.Dense(128, activation= 'relu'))
-        model.add(tf.keras.layers.Dense(10, activation='softmax')) #10 por los 10 números(0-9), esto es el 'output'. Hay que poner esto debido a los 10 numeros con los que entrenamos a la ia(mnist). Investigar acerca del activation
+        model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))# Se puede poner lo que sea en el str, Relu = rectify linear unit
+        model.add(tf.keras.layers.Dense(128, activation= tf.nn.relu))
+        model.add(tf.keras.layers.Dense(units=10,activation='softmax')) #10 por los 10 números(0-9), esto es el 'output'. Hay que poner esto debido a los 10 numeros con los que entrenamos a la ia(mnist). Investigar acerca del activation
 
         model.compile(optimizer= 'adam', loss= 'sparse_categorical_crossentropy', metrics = ['accuracy'])#Lo compilamos
 
-        model.fit(x_train, y_train, epochs= 10) # Lo entrenamos
+        model.fit(x_train, y_train, epochs= 3) # Lo entrenamos
 
         model.save(self.model_name) 
     
@@ -42,13 +42,19 @@ class numbers_ia:
             img = Image.open(f'squares/square{n}.png').convert('L')
 
             dark = 0
+            new_imgdata = []
 
-            for x in range(0, 28, 4):
-                for y in range(0, 28, 4):
-                    grey  = img.getpixel((x, y))
+            for color in img.getdata():
+                if color < 200:
+                    new_imgdata.append(0)
+                    dark +=1
+                else:
+                    new_imgdata.append(255)    
 
-                    if grey < 200:
-                        dark +=1
+            new_img = Image.new(img.mode, img.size)
+            new_img.putdata(new_imgdata)
+
+            new_img.save(f'squares/square{n}.png')
 
             if dark>=1:
                 self.numbers_index.append(n)
@@ -132,7 +138,7 @@ class numbers_ia:
 
 nia = numbers_ia()
 
-#nia.create_model()
+nia.create_model()
 nia.get_number_boxes()
 nia.predict_numbers()
 nia.create_matrix()
@@ -141,10 +147,7 @@ nia.accuracy_prediction_matrix()
 
 
 '''
-Model 1: 46 Success
-Model 2: 48 Success
-Model 2(greyscale): 48
+Model 3:(Blanco y negro): 60
+Model 4:(changes in layers): 57 
 
-Model 2:(count numbers): 58 
-Model 1:(count numbers): 56
 '''
