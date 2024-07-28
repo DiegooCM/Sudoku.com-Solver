@@ -11,7 +11,7 @@ from PIL import Image
 class numbers_ia:
 
     def __init__(self):
-        self.model_name = 'model4.keras'
+        self.model_name = 'model1.keras'
 
 
     def create_model(self):
@@ -24,14 +24,21 @@ class numbers_ia:
 
         model = tf.keras.models.Sequential()
 
-        model.add(tf.keras.layers.Flatten(input_shape=(28, 28)))
-        model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))# Se puede poner lo que sea en el str, Relu = rectify linear unit
-        model.add(tf.keras.layers.Dense(128, activation= tf.nn.relu))
-        model.add(tf.keras.layers.Dense(units=10,activation='softmax')) #10 por los 10 números(0-9), esto es el 'output'. Hay que poner esto debido a los 10 numeros con los que entrenamos a la ia(mnist). Investigar acerca del activation
+        model.add(tf.keras.layers.Conv2D(32, (3, 3), input_shape=(28, 28, 1), activation='relu'))
+        # Add a Max pooling layer
+        model.add(tf.keras.layers.MaxPool2D())
+        # Add the flattened layer
+        model.add(tf.keras.layers.Flatten())
+        # Add the hidden layer
+        model.add(tf.keras.layers.Dense(512, activation='relu'))
+        # Adding a dropout layer
+        model.add(tf.keras.layers.Dropout(0.2))
+        # Add the output layer
+        model.add(tf.keras.layers.Dense(10, activation='softmax'))
+        # Compiling the model
+        model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
-        model.compile(optimizer= 'adam', loss= 'sparse_categorical_crossentropy', metrics = ['accuracy'])#Lo compilamos
-
-        model.fit(x_train, y_train, epochs= 3) # Lo entrenamos
+        model.fit(x_train, y_train, epochs= 5) # Lo entrenamos
 
         model.save(self.model_name) 
     
@@ -45,7 +52,7 @@ class numbers_ia:
             new_imgdata = []
 
             for color in img.getdata():
-                if color < 200:
+                if color < 155:
                     new_imgdata.append(0)
                     dark +=1
                 else:
@@ -58,6 +65,8 @@ class numbers_ia:
 
             if dark>=1:
                 self.numbers_index.append(n)
+            
+            
 
     def predict_numbers(self):
         model = tf.keras.models.load_model(self.model_name)
@@ -66,8 +75,11 @@ class numbers_ia:
         for n in self.numbers_index:
 
             try:
-                img = cv2.imread(f'squares/square{n}.png')[:,:,0]
+                img = cv2.imread(f'squares/square{n}.png', 0)
+
+                img = cv2.resize(img, (28, 28), interpolation=cv2.INTER_LINEAR)
                 img = np.invert(np.array([img]))
+                
                 prediction = model.predict(img)
 
                 number_s = np.argmax(prediction)
@@ -108,19 +120,19 @@ class numbers_ia:
         print(self.matrix)
 
     def accuracy_prediction_matrix(self):
-        real_matrix = [[None,None,None,7,6,2,None,9,None],
-               [None,None,None,3,8,None,None,2,7],
-               [2,8,None, None,5,9,1,6,3],
-               [None, None, None, None, None, None, 6, None, 1],
-               [None, 1, 5, None, None, 3, 2, None, None],
-               [6, None, None, None, 4, 5, 7, None , 8],
-               [None, 2, None, 9, None, None, 4, None, 5],
-               [None, 7, None, 8,2,4, None, None, None],
-               [9, None, None, 5, None, 7, None, 8, None]]
-
+        real_matrix = [[5, None, 1, 6, None, 2, 9, None, 4],
+               [6, None, 9, 8, None, None, None, None, None],
+               [8, 2, 7, None, None, 9, None, None, 3],
+               [4, None, 6, 1, None, 7, None, None, 2],
+               [2, 1, 8, 3, None, None, None, None, 5],
+               [7, 5, None, None, None, 4, None, 9, None],
+               [None, 7, 4, None, 2, None, None, None, 1],
+               [None, 8, None, None, 6, 3, None, None, None],
+               [None, None, None, None, None, 5, 3, 7, None]]
+ 
         success = 0
         wrong = 0
-
+        wrong_items = []
         for a in range(len(real_matrix)):
             for b in range(len(real_matrix[0])):
                 rm_item = real_matrix[a][b]
@@ -129,16 +141,17 @@ class numbers_ia:
                 if rm_item == pm_item:
                     success +=1
                 else:
+                    wrong_items.append(rm_item)
                     wrong +=1
 
 
-        print(f'Success = {success}\nWrong = {wrong}')
+        print(f'Success = {success}\nWrong = {wrong}\n Se ha equivocado en los siguientes números: {wrong_items}')
 
 
 
 nia = numbers_ia()
 
-nia.create_model()
+#nia.create_model()
 nia.get_number_boxes()
 nia.predict_numbers()
 nia.create_matrix()
@@ -147,7 +160,9 @@ nia.accuracy_prediction_matrix()
 
 
 '''
-Model 3:(Blanco y negro): 60
-Model 4:(changes in layers): 57 
+Model1(CNN): 68
+Model1(CNN)(cambiando el color): 65
+
+Model 1(CNN copiado de github): 64
 
 '''

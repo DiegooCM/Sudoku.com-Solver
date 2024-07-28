@@ -7,7 +7,7 @@ from PIL import Image
 from PIL import ImageGrab
 
 class board():
-    def __init__(self):
+    def open_browser(self):
         self.browser = webdriver.Chrome()
         url = "https://sudoku.com/"
         self.browser.get(url)
@@ -24,7 +24,7 @@ class board():
         game.screenshot('board.png')
 
     def get_boxes(self):
-        filename = r'board.png'
+        filename = r'Proyectos\Bots\BotSudoku.com\board.png'
 
         board = Image.open(filename)
 
@@ -39,9 +39,8 @@ class board():
                 square = board.crop(square_bbox)
                 square = square.crop((4, 4, 32, 32))
 
-                square.convert('L')
-
-                square.save(f'squares/square{n}.png')
+                square.save(f'D:/Programacion/MisProgramas/Python/Proyectos/Bots/BotSudoku.com/squares/square{n}.png')
+                
                 n+=1
 
 
