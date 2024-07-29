@@ -1,10 +1,8 @@
 from time import sleep 
-from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from time import sleep
 from PIL import Image
-from PIL import ImageGrab
 
 class board():
     def open_browser(self):
@@ -33,14 +31,14 @@ class board():
 
         size = board.size
 
-        square_size = int(size[0] // 9) + 1
+        square_size = int(size[0] // 9)
 
         n = 0
-        for y in range(0, size[0], square_size):
-            for x in range(0, size[0], square_size):
+        for y in range(0, size[0] - 10, square_size):
+            for x in range(0, size[0] - 10, square_size):
                 square_bbox =  x , y, square_size + x , square_size + y #im.crop((left - x0, top - y0, right - x0, bottom - y0))
                 square = board.crop(square_bbox)
-                square = square.crop((6, 6, 45, 45))
+                square = square.crop((12, 12, 45, 45))
 
                 square.save(f'squares/square{n}.png')
                 
@@ -48,13 +46,13 @@ class board():
 
 
 
-board = board()
+#board = board()
 
 #board.open_browser()
 #board.reject_cookies()
 #board.screenshot()
 
-board.get_boxes()
+#board.get_boxes()
 
 
     

@@ -1,13 +1,10 @@
 import tensorflow as tf
-import os
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 from PIL import Image
 
-#Probar en algun momento a entrenar la ia con casillas del sudoku
+#Probar cambiar los colores de los pixeles que quiera en ciertos numeros. ejemplo: if grey == 254: 0
 
-# Poner los cuadrados en greyscale, si sigue sin funcionar hacer algo para los cuadrados blancos y que el modelo solo analice los numeros
 class numbers_ia:
 
     def __init__(self):
@@ -133,6 +130,7 @@ class numbers_ia:
         success = 0
         wrong = 0
         wrong_items = []
+        correct_wrong = []
         for a in range(len(real_matrix)):
             for b in range(len(real_matrix[0])):
                 rm_item = real_matrix[a][b]
@@ -142,13 +140,14 @@ class numbers_ia:
                     success +=1
                 else:
                     wrong_items.append(rm_item)
+                    correct_wrong.append(pm_item)
                     wrong +=1
 
 
-        print(f'Success = {success}\nWrong = {wrong}\n Se ha equivocado en los siguientes números: {wrong_items}')
+        print(f'Success = {success}\nWrong = {wrong}\n Se ha equivocado en los siguientes números: {wrong_items}\n                             Debería de ser: {correct_wrong}')
 
 
-
+'''
 nia = numbers_ia()
 
 #nia.create_model()
@@ -159,10 +158,13 @@ nia.create_matrix()
 nia.accuracy_prediction_matrix()
 
 
-'''
+
+Model 1(Con cambios en los recortes)
 Model1(CNN): 68
 Model1(CNN)(cambiando el color): 65
 
 Model 1(CNN copiado de github): 64
 
 '''
+
+

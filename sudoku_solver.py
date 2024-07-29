@@ -85,11 +85,6 @@ class solver():
                             if missing != None: self.matrix[a][b] = missing
         
         print(self.matrix)
-                
-
-solve = solver()
-
-solve.check_axis()
 
 
 '''
