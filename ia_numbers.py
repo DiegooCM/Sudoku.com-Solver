@@ -68,6 +68,11 @@ class numbers_ia:
     def predict_numbers(self):
         model = tf.keras.models.load_model(self.model_name)
         self.numbers_matrix = []
+        print(self.numbers_index)
+        print(self.numbers_index)
+        print(self.numbers_index)
+        print(self.numbers_index)
+
 
         for n in self.numbers_index:
 
@@ -126,7 +131,8 @@ class numbers_ia:
                [None, 7, 4, None, 2, None, None, None, 1],
                [None, 8, None, None, 6, 3, None, None, None],
                [None, None, None, None, None, 5, 3, 7, None]]
- 
+
+        self.matrix = [[5, None, 1, 6, None, 2, 9, None, 4], [6, None, 9, 8, None, None, None, None, None], [8, 2, 7, None, None, 9, None, None, 3], [4, None, 6, 1, None, 7, None, None, 0], [2, 1, 8, 3, None, None, None, None, 5], [7, 5, None, None, None, 4, None, 9, None], [None, 7, 4, None, 2, None, None, None, 0], [None, 8, None, None, 6, 3, None, None, None], [None, None, None, None, None, 5, 3, 7, None]]
         success = 0
         wrong = 0
         wrong_items = []

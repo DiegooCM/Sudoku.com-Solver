@@ -38,7 +38,7 @@ class board():
             for x in range(0, size[0] - 10, square_size):
                 square_bbox =  x , y, square_size + x , square_size + y #im.crop((left - x0, top - y0, right - x0, bottom - y0))
                 square = board.crop(square_bbox)
-                square = square.crop((12, 12, 45, 45))
+                #square = square.crop((12, 12, 45, 45))
 
                 square.save(f'squares/square{n}.png')
                 

@@ -10,6 +10,11 @@ from sklearn.metrics import accuracy_score
 
 from PIL import Image
 
+'''
+ME PREDICE TODOS LOS NÚMEROS COMO 2
+'''
+
+
 # Carga el dataset MNIST
 mnist = fetch_openml('mnist_784', version=1)
 X, y = mnist["data"], mnist["target"]
@@ -47,21 +52,20 @@ clf = pickle.load(pickle_in)
 '''
 # Aquí estamos creando una imagen aleatoria para el ejemplo
 
-image_path = 'squares/square3.png'
-image = Image.open(image_path).convert('L')  # Convertir a escala de grises
-image = image.resize((28, 28), Image.ANTIALIAS)  # Redimensionar a 28x28 píxeles
+predictions_array = []
 
-# Paso 2: Convertir la imagen a un array de numpy y aplanarla
-image_array = np.array(image).reshape(1, -1)
+for n in [0, 2, 3, 5, 6, 8, 9, 11, 12, 18, 19, 20, 23, 26, 27, 29, 30, 32, 35, 36, 37, 38, 39, 44, 45, 46, 50, 52, 55, 56, 58, 62, 64, 67, 68, 77, 78, 79]:
+    
+	image_path = f'squares/square{n}.png'
+	image = Image.open(image_path).convert('L') 
+	image = image.resize((28, 28), resample=Image.BILINEAR)
 
-# Paso 3: Escalar la imagen usando el mismo escalador que para los datos de entrenamiento
-image_scaled = scaler.transform(image_array)
+	image_array = np.array(image).reshape(1, -1)
 
-plt.imshow(image, cmap='gray')
-plt.title("Imagen redimensionada a 28x28")
-plt.show()
+	image_scaled = scaler.transform(image_array)
 
-# Paso 4: Hacer la predicción
-predicted_label = knn.predict(image_scaled)
+	predicted_label = knn.predict(image_array)
 
-print(f'La imagen ha sido clasificada como: {predicted_label[0]}')
+	predictions_array.append(predicted_label[0])
+
+print(predictions_array)

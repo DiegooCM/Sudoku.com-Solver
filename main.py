@@ -11,14 +11,14 @@ def main():
     #find_board.reject_cookies()
     #find_board.screenshot()
 
-    find_board.get_boxes()
+    #find_board.get_boxes()
 
     #numbers.create_model()
-    '''numbers.get_number_boxes()
-    numbers.predict_numbers()
-    numbers.create_matrix()
+    #numbers.get_number_boxes()
+    #numbers.predict_numbers()
+    #numbers.create_matrix()
 
-    numbers.accuracy_prediction_matrix()'''
+    numbers.accuracy_prediction_matrix()
     
     #pass
 
