@@ -3,10 +3,15 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from time import sleep
 from PIL import Image
+import pyautogui
+from selenium.webdriver.chrome.options import Options
 
 class board():
     def open_browser(self):
-        self.browser = webdriver.Chrome()
+        chrome_options = Options()
+        chrome_options.add_argument("--disable-search-engine-choice-screen")
+
+        self.browser = webdriver.Chrome(options=chrome_options)
         url = "https://sudoku.com/"
         self.browser.maximize_window()
         self.browser.get(url)
@@ -19,10 +24,14 @@ class board():
         self.browser.find_element(By.CLASS_NAME, 'ot-pc-refuse-all-handler').click()
 
     def screenshot(self):
-        sleep(10)
-        game =  self.browser.find_element(By.ID, 'game')
-        sleep(2)
-        game.screenshot('board.png')
+        self.game =  self.browser.find_element(By.ID, 'game')
+
+        location = self.game.location
+        self.x_game = location['x'] 
+        self.y_game = location['y'] + 150
+
+        pyautogui.doubleClick(self.x_game + 20, self.y_game)
+        self.game.screenshot('board.png')
 
     def get_boxes(self):
         filename = 'board.png'
@@ -37,23 +46,30 @@ class board():
         for y in range(0, size[0] - 10, square_size):
             for x in range(0, size[0] - 10, square_size):
                 square_bbox =  x , y, square_size + x , square_size + y #im.crop((left - x0, top - y0, right - x0, bottom - y0))
-                square = board.crop(square_bbox)
-                #square = square.crop((12, 12, 45, 45))
+                self.square = board.crop(square_bbox)
+                self.square_size = self.square.size
+                self.square = self.square.crop((12, 12, 45, 45))
 
-                square.save(f'squares/square{n}.png')
+                self.square.save(f'squares/square{n}.png')
                 
                 n+=1
 
+    def click_solution(self, matrix, empty):
+        
+        pos = 0
+        for column in range(len(matrix)):
+            for row in range(len(matrix)):
+                
+                if pos in empty:
+                    pos_click = (self.x_game + (row * self.square_size[0])) + 30, (self.y_game + (column * self.square_size[0])) + 25
 
 
-#board = board()
+                    pyautogui.click(pos_click[0], pos_click[1]) 
 
-#board.open_browser()
-#board.reject_cookies()
-#board.screenshot()
-
-#board.get_boxes()
-
-
-    
+                    pyautogui.press(str(matrix[column][row])) 
+                
+                pos += 1
+        
+        sleep(10)
+        self.browser.close()
 

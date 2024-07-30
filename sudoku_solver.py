@@ -4,18 +4,10 @@ from time import sleep
 
 class solver():
 
-    def __init__(self):
-        self.matrix = [[None,None,None,7,6,2,None,9,None],
-               [None,None,None,3,8,None,None,2,7],
-               [2,8,None, None,5,9,1,6,3],
-               [None, None, None, None, None, None, 6, None, 1],
-               [None, 1, 5, None, None, 3, 2, None, None],
-               [6, None, None, None, 4, 5, 7, None , 8],
-               [None, 2, None, 9, None, None, 4, None, 5],
-               [None, 7, None, 8,2,4, None, None, None],
-               [9, None, None, 5, None, 7, None, 8, None]]
+    def __init__(self, matrix):
+        self.matrix = matrix
         
-    def check_axis(self):
+    def solve_matrix(self):
         '''Mira en la fila, columna y cuadrado del item, y hace una lista de todos los números que aparecen'''
 
         def check_x(x, y):
@@ -84,19 +76,4 @@ class solver():
 
                             if missing != None: self.matrix[a][b] = missing
         
-        print(self.matrix)
-
-
-'''
-[[3, 5, 1, 7, 6, 2, 8, 9, 4], 
-[4, 6, 9, 3, 8, 1, 5, 2, 7], 
-[2, 8, 7, 4, 5, 9, 1, 6, 3], 
-[7, 3, 4, 2, 9, 8, 6, 5, 1], 
-[8, 1, 5, 6, 7, 3, 2, 4, 9], 
-[6, 9, 2, 1, 4, 5, 7, 3, 8], 
-[1, 2, 8, 9, 3, 6, 4, 7, 5], 
-[5, 7, 3, 8, 2, 4, 9, 1, 6], 
-[9, 4, 6, 5, 1, 7, 3, 8, 2]]
-
-'''
-
+        return self.matrix
