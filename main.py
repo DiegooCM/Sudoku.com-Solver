@@ -4,14 +4,14 @@ from sudoku_solver import solver
 
 def main():
     find_board = board()
-    numbers = numbers_ia()
+    
     
     find_board.open_browser()
     find_board.reject_cookies()
     find_board.screenshot()
+    squares = find_board.get_boxes()
 
-    find_board.get_boxes()
-
+    numbers = numbers_ia(squares)
     numbers.create_model()
     empty_index = numbers.get_number_boxes()
     numbers.predict_numbers()
@@ -26,3 +26,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+'''
+Que tarde menos en escribir los numeros
+Ultimo. Subirlo a github con el readme y toda la pesca
+'''

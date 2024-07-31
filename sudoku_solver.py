@@ -72,8 +72,8 @@ class solver():
                             #print(f'Square: {square_list}')
 
                             
-                            missing = find_missing_item(x_axis, y_axis, square_list)
+                            missing_item = find_missing_item(x_axis, y_axis, square_list)
 
-                            if missing != None: self.matrix[a][b] = missing
+                            if missing_item != None: self.matrix[a][b] = missing_item
         
         return self.matrix
