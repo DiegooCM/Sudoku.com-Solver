@@ -8,9 +8,9 @@ class solver():
         self.matrix = matrix
         
     def solve_matrix(self):
-        '''Mira en la fila, columna y cuadrado del item, y hace una lista de todos los números que aparecen'''
+        '''Look at the row, column, and square of the item, and make a list of all the numbers that appear. Then look at which numbers are missing from the list, and if only one is missing, write it in the matrix.'''
 
-        def check_x(x, y):
+        def check_x_y(x, y):
             x_axis = []
             y_axis = []
 
@@ -47,7 +47,6 @@ class solver():
             f_array = np.unique(f_array)
 
             results = np.setdiff1d(posible_numbers, f_array)
-            #print(results)
  
             if len(results) == 1:
                 missing = results[0]
@@ -55,22 +54,20 @@ class solver():
                 return missing
 
 
-        '''Mira si en la matriz hay algun None, y si lo hay pues intenta resolverlo'''
+        '''Checks if in the matrix exists a "None", and if not, try to solve it'''
         for xs in range(len(self.matrix)):
             while None in self.matrix[xs]:
-                '''Resuelve como antes mencionado'''
+                '''Solve as mentioned above'''
             
                 for a in range(len(self.matrix)):
                     for b in range(len(self.matrix)):
 
                         item = self.matrix[a][b]
                         if item == None:
-                            #print(f'{a, b}:')
-                            x_axis, y_axis = check_x(a, b)
-                            #print(f'X axis: {x_axis} Y axis: {y_axis}')
-                            square_list = check_square(a, b)
-                            #print(f'Square: {square_list}')
 
+                            x_axis, y_axis = check_x_y(a, b)
+
+                            square_list = check_square(a, b)
                             
                             missing_item = find_missing_item(x_axis, y_axis, square_list)
 

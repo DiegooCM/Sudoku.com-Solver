@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 class board():
     def open_browser(self):
+        '''Opens the browser and the sudoku.com webpage'''
         chrome_options = Options()
         chrome_options.add_argument("--disable-search-engine-choice-screen")
 
@@ -22,11 +23,13 @@ class board():
         self.browser.implicitly_wait(10)
         html = self.browser.page_source.encode('utf-8').strip()
 
-    def reject_cookies(self):   
+    def reject_cookies(self):
+        '''Rejects cookies'''   
         self.browser.find_element(By.ID, 'onetrust-pc-btn-handler').click()
         self.browser.find_element(By.CLASS_NAME, 'ot-pc-refuse-all-handler').click()
 
     def screenshot(self):
+        '''Makes a screenshot of the sudoku board. The leftClicks are to delete a text that appears in the sudoku board when you open the webpage'''
         self.game =  self.browser.find_element(By.ID, 'game')
 
         location = self.game.location
@@ -39,6 +42,7 @@ class board():
         self.game.screenshot('board.png')
 
     def get_boxes(self):
+        '''Makes the array with all squares from the board.png'''
         filename = 'board.png'
 
         board = Image.open(filename)
@@ -80,6 +84,7 @@ class board():
         return squares
 
     def click_solution(self, matrix, empty):
+        '''Clicks the solution on the board, and removes board.png'''
         os.remove('board.png')
         
         pos = 0
@@ -98,5 +103,3 @@ class board():
         sleep(10)
         self.browser.close()
         self.browser.quit()
-        
-
