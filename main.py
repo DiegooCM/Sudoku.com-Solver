@@ -6,7 +6,7 @@ def main():
     # Open the browser and the webpage, and get an array of the squares
     find_board = board()
     
-    find_board.open_browser()
+    find_board.open_browser(mode = 'hard') #Choose mode between: easy, medium, hard, expert, evil, extreme
     find_board.reject_cookies()
     find_board.screenshot()
     squares = find_board.get_boxes()

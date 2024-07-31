@@ -10,13 +10,22 @@ from selenium.webdriver.chrome.options import Options
 
 
 class board():
-    def open_browser(self):
+    def open_browser(self, mode):
         '''Opens the browser and the sudoku.com webpage'''
         chrome_options = Options()
         chrome_options.add_argument("--disable-search-engine-choice-screen")
 
         self.browser = webdriver.Chrome(options=chrome_options)
+
         url = "https://sudoku.com/"
+
+        if mode in ['easy', 'medium', 'hard', 'expert', 'evil', 'extreme']:
+            difficulty = mode
+            url = url + mode
+        else:
+            print('Mode not found, it will run in easy mode.')
+
+        
         self.browser.maximize_window()
         self.browser.get(url)
         
